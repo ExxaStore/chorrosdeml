@@ -1,0 +1,147 @@
+// Datos aleatorios para poblar la tabla
+const datosTransacciones = [
+    {
+        fecha: "2024-02-15",
+        nroVenta: "ML-23589741",
+        nombreCompleto: "María González",
+        documento: "28.456.123",
+        direccion: "Av. Corrientes 1234, CABA",
+        producto: "Smartphone Samsung Galaxy S21",
+        ventaDolares: 450,
+        razonDevolucion: "Producto defectuoso",
+        itemDevuelto: "Teléfono completo",
+        prueba: "Fotos del producto"
+    },
+    {
+        fecha: "2024-03-05",
+        nroVenta: "ML-78452156",
+        nombreCompleto: "Juan Rodríguez",
+        documento: "32.789.654",
+        direccion: "Calle 9 de Julio 789, Córdoba",
+        producto: "Laptop Lenovo ThinkPad",
+        ventaDolares: 850,
+        razonDevolucion: "No cumple expectativas",
+        itemDevuelto: "Laptop y accesorios",
+        prueba: "Correo de reclamo"
+    },
+    {
+        fecha: "2024-01-23",
+        nroVenta: "ML-96325874",
+        nombreCompleto: "Carlos Martínez",
+        documento: "25.369.147",
+        direccion: "Calle San Martín 369, Mendoza",
+        producto: "Auriculares Sony WH-1000XM4",
+        ventaDolares: 220,
+        razonDevolucion: "Entrega incorrecta",
+        itemDevuelto: "Producto sellado",
+        prueba: "Ticket de compra"
+    },
+    {
+        fecha: "2024-04-10",
+        nroVenta: "ML-41236587",
+        nombreCompleto: "Ana Pérez",
+        documento: "29.587.412",
+        direccion: "Av. Belgrano 2541, Rosario",
+        producto: "Monitor LG 27''",
+        ventaDolares: 180,
+        razonDevolucion: "Mejor oferta",
+        itemDevuelto: "Monitor con base",
+        prueba: "Screenshot de oferta"
+    },
+    {
+        fecha: "2024-02-28",
+        nroVenta: "ML-14789632",
+        nombreCompleto: "Roberto Sánchez",
+        documento: "35.741.258",
+        direccion: "Calle Rivadavia 741, Mar del Plata",
+        producto: "Teclado Mecánico Redragon",
+        ventaDolares: 75,
+        razonDevolucion: "No compatible",
+        itemDevuelto: "Teclado en caja",
+        prueba: "Video demostración"
+    },
+    {
+        fecha: "2024-03-15",
+        nroVenta: "ML-36985214",
+        nombreCompleto: "Laura Fernández",
+        documento: "27.896.541",
+        direccion: "Av. Santa Fe 1478, CABA",
+        producto: "Tablet iPad Pro 12.9",
+        ventaDolares: 950,
+        razonDevolucion: "Arrepentimiento",
+        itemDevuelto: "Tablet y accesorios",
+        prueba: "Formulario de devolución"
+    },
+    {
+        fecha: "2024-01-05",
+        nroVenta: "ML-25874136",
+        nombreCompleto: "Diego López",
+        documento: "33.547.896",
+        direccion: "Calle Mitre 963, Tucumán",
+        producto: "Consola PlayStation 5",
+        ventaDolares: 550,
+        razonDevolucion: "Fallo técnico",
+        itemDevuelto: "Consola completa",
+        prueba: "Informe técnico"
+    },
+    {
+        fecha: "2024-04-20",
+        nroVenta: "ML-98745632",
+        nombreCompleto: "Valeria Gómez",
+        documento: "30.258.741",
+        direccion: "Av. Pueyrredón 258, CABA",
+        producto: "Cámara Canon EOS R6",
+        ventaDolares: 1200,
+        razonDevolucion: "Producto incorrecto",
+        itemDevuelto: "Cámara y lentes",
+        prueba: "Comparación de modelos"
+    },
+    {
+        fecha: "2024-02-10",
+        nroVenta: "ML-65412398",
+        nombreCompleto: "Martín Torres",
+        documento: "26.541.398",
+        direccion: "Calle Laprida 456, Bahía Blanca",
+        producto: "Smartwatch Apple Watch",
+        ventaDolares: 320,
+        razonDevolucion: "Tamaño incorrecto",
+        itemDevuelto: "Reloj con correa",
+        prueba: "Chat con vendedor"
+    },
+    {
+        fecha: "2024-03-30",
+        nroVenta: "ML-32145698",
+        nombreCompleto: "Silvia Ramírez",
+        documento: "31.456.987",
+        direccion: "Av. Cabildo 1423, CABA",
+        producto: "Zapatillas Nike Air Max",
+        ventaDolares: 130,
+        razonDevolucion: "Talla incorrecta",
+        itemDevuelto: "Calzado en caja",
+        prueba: "Foto comparativa"
+    },
+    {
+        fecha: "2024-01-15",
+        nroVenta: "ML-78965412",
+        nombreCompleto: "Pedro Giménez",
+        documento: "28.963.741",
+        direccion: "Calle San Juan 789, Córdoba",
+        producto: "Licuadora Oster",
+        ventaDolares: 85,
+        razonDevolucion: "Mejor modelo",
+        itemDevuelto: "Producto completo",
+        prueba: "Factura de compra"
+    },
+    {
+        fecha: "2024-04-05",
+        nroVenta: "ML-45678912",
+        nombreCompleto: "Lucía Morales",
+        documento: "34.125.789",
+        direccion: "Av. Directorio 1245, CABA",
+        producto: "Silla de Escritorio Ergonómica",
+        ventaDolares: 160,
+        razonDevolucion: "Color equivocado",
+        itemDevuelto: "Silla embalada",
+        prueba: "Confirmación de pedido"
+    }
+]; 

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Ventas y Devoluciones</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Sistema de Gestión de Ventas y Devoluciones</h1>
+        
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                <h6 class="m-0 font-weight-bold">Listado de Transacciones</h6>
+                <div class="input-group w-50">
+                    <input type="text" id="busqueda" class="form-control" placeholder="Buscar...">
+                    <button class="btn btn-outline-secondary" type="button">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" id="tablaDatos">
+                        <thead class="table-light">
+                            <tr>
+                                <th data-key="fecha" class="sortable">Fecha <i class="bi bi-arrow-down-up"></i></th>
+                                <th data-key="nroVenta" class="sortable">Nro Venta ML <i class="bi bi-arrow-down-up"></i></th>
+                                <th data-key="nombreCompleto" class="sortable">Nombre y Apellido <i class="bi bi-arrow-down-up"></i></th>
+                                <th data-key="documento" class="sortable">Documento <i class="bi bi-arrow-down-up"></i></th>
+                                <th data-key="direccion" class="sortable">Dirección <i class="bi bi-arrow-down-up"></i></th>
+                                <th data-key="producto" class="sortable">Producto <i class="bi bi-arrow-down-up"></i></th>
+                                <th data-key="ventaDolares" class="sortable">Venta U$D <i class="bi bi-arrow-down-up"></i></th>
+                                <th data-key="razonDevolucion" class="sortable">Razón Devolución <i class="bi bi-arrow-down-up"></i></th>
+                                <th data-key="itemDevuelto" class="sortable">Qué Devolvió <i class="bi bi-arrow-down-up"></i></th>
+                                <th data-key="prueba" class="sortable">Prueba <i class="bi bi-arrow-down-up"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaCuerpo">
+                            <!-- Los datos se cargarán dinámicamente con JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 
