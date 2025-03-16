@@ -1,16 +1,27 @@
 // Variables globales
-let datos = [...datosTransacciones];
+let datos = localStorage.getItem('chorrodeml_datos') ? 
+    JSON.parse(localStorage.getItem('chorrodeml_datos')) : 
+    [...datosTransacciones];
+
 let ordenActual = {
     columna: 'fecha',
     direccion: 'desc'
 };
+
+let idTransaccionEliminar = null;
+let modoEdicion = false;
+
+// Función para guardar datos en localStorage
+function guardarDatosLocales() {
+    localStorage.setItem('chorrodeml_datos', JSON.stringify(datos));
+}
 
 // Función para cargar los datos en la tabla
 function cargarDatos(datos) {
     const tablaCuerpo = document.getElementById('tablaCuerpo');
     tablaCuerpo.innerHTML = '';
 
-    datos.forEach(item => {
+    datos.forEach((item, index) => {
         const fila = document.createElement('tr');
         
         // Formatear la fecha para visualización
@@ -34,9 +45,32 @@ function cargarDatos(datos) {
             <td>${item.razonDevolucion || '-'}</td>
             <td>${item.itemDevuelto || '-'}</td>
             <td>${item.prueba || '-'}</td>
+            <td>
+                <button class="btn-action btn-action-edit" data-index="${index}">
+                    <i class="bi bi-pencil-square"></i>
+                </button>
+                <button class="btn-action btn-action-delete" data-index="${index}">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </td>
         `;
         
         tablaCuerpo.appendChild(fila);
+    });
+
+    // Agregar event listeners a los botones de acción
+    document.querySelectorAll('.btn-action-edit').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const index = e.currentTarget.getAttribute('data-index');
+            abrirModalEdicion(index);
+        });
+    });
+
+    document.querySelectorAll('.btn-action-delete').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const index = e.currentTarget.getAttribute('data-index');
+            abrirModalEliminar(index);
+        });
     });
 }
 
@@ -98,23 +132,141 @@ function ordenarDatos(columna) {
 // Función para filtrar los datos
 function filtrarDatos() {
     const textoBusqueda = document.getElementById('busqueda').value.toLowerCase();
+    let datosFiltrados;
     
     if (!textoBusqueda) {
-        datos = [...datosTransacciones];
+        datosFiltrados = [...datos];
     } else {
-        datos = datosTransacciones.filter(item => {
+        datosFiltrados = datos.filter(item => {
             return Object.values(item).some(valor => 
                 valor.toString().toLowerCase().includes(textoBusqueda)
             );
         });
     }
     
-    // Reordenar según el ordenamiento actual
+    // Recargar la tabla con los datos filtrados
+    cargarDatos(datosFiltrados);
+}
+
+// Función para abrir el modal en modo creación
+function abrirModalCreacion() {
+    document.getElementById('transaccionModalLabel').textContent = 'Nueva Transacción';
+    document.getElementById('transaccionForm').reset();
+    
+    // Configurar la fecha de hoy por defecto
+    const hoy = new Date().toISOString().split('T')[0];
+    document.getElementById('fecha').value = hoy;
+    
+    // Generar número de venta aleatorio para nueva transacción
+    const numeroAleatorio = Math.floor(Math.random() * 90000000) + 10000000;
+    document.getElementById('nroVenta').value = `ML-${numeroAleatorio}`;
+    
+    document.getElementById('transaccionId').value = '';
+    modoEdicion = false;
+    
+    const transaccionModal = new bootstrap.Modal(document.getElementById('transaccionModal'));
+    transaccionModal.show();
+}
+
+// Función para abrir el modal en modo edición
+function abrirModalEdicion(index) {
+    const transaccion = datos[index];
+    document.getElementById('transaccionModalLabel').textContent = 'Editar Transacción';
+    
+    // Llenar el formulario con los datos existentes
+    document.getElementById('fecha').value = transaccion.fecha;
+    document.getElementById('nroVenta').value = transaccion.nroVenta;
+    document.getElementById('nombreCompleto').value = transaccion.nombreCompleto;
+    document.getElementById('documento').value = transaccion.documento;
+    document.getElementById('direccion').value = transaccion.direccion;
+    document.getElementById('producto').value = transaccion.producto;
+    document.getElementById('ventaDolares').value = transaccion.ventaDolares;
+    document.getElementById('razonDevolucion').value = transaccion.razonDevolucion || '';
+    document.getElementById('itemDevuelto').value = transaccion.itemDevuelto || '';
+    document.getElementById('prueba').value = transaccion.prueba || '';
+    
+    document.getElementById('transaccionId').value = index;
+    modoEdicion = true;
+    
+    const transaccionModal = new bootstrap.Modal(document.getElementById('transaccionModal'));
+    transaccionModal.show();
+}
+
+// Función para guardar una transacción (crear nueva o editar existente)
+function guardarTransaccion() {
+    // Validar el formulario
+    const formulario = document.getElementById('transaccionForm');
+    if (!formulario.checkValidity()) {
+        formulario.reportValidity();
+        return;
+    }
+    
+    // Obtener valores del formulario
+    const nuevaTransaccion = {
+        fecha: document.getElementById('fecha').value,
+        nroVenta: document.getElementById('nroVenta').value,
+        nombreCompleto: document.getElementById('nombreCompleto').value,
+        documento: document.getElementById('documento').value,
+        direccion: document.getElementById('direccion').value,
+        producto: document.getElementById('producto').value,
+        ventaDolares: parseFloat(document.getElementById('ventaDolares').value),
+        razonDevolucion: document.getElementById('razonDevolucion').value,
+        itemDevuelto: document.getElementById('itemDevuelto').value,
+        prueba: document.getElementById('prueba').value
+    };
+    
+    if (modoEdicion) {
+        // Modo edición - actualizar transacción existente
+        const index = document.getElementById('transaccionId').value;
+        datos[index] = nuevaTransaccion;
+    } else {
+        // Modo creación - agregar nueva transacción
+        datos.push(nuevaTransaccion);
+    }
+    
+    // Guardar cambios en localStorage
+    guardarDatosLocales();
+    
+    // Cerrar el modal
+    const transaccionModal = bootstrap.Modal.getInstance(document.getElementById('transaccionModal'));
+    transaccionModal.hide();
+    
+    // Reordenar y mostrar datos actualizados
     ordenarDatos(ordenActual.columna);
+}
+
+// Función para abrir el modal de confirmación de eliminación
+function abrirModalEliminar(index) {
+    idTransaccionEliminar = index;
+    const eliminarModal = new bootstrap.Modal(document.getElementById('eliminarModal'));
+    eliminarModal.show();
+}
+
+// Función para eliminar una transacción
+function eliminarTransaccion() {
+    if (idTransaccionEliminar !== null) {
+        datos.splice(idTransaccionEliminar, 1);
+        idTransaccionEliminar = null;
+        
+        // Guardar cambios en localStorage
+        guardarDatosLocales();
+        
+        // Cerrar el modal
+        const eliminarModal = bootstrap.Modal.getInstance(document.getElementById('eliminarModal'));
+        eliminarModal.hide();
+        
+        // Reordenar y mostrar datos actualizados
+        ordenarDatos(ordenActual.columna);
+    }
 }
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
+    // Guardar datos iniciales en localStorage si no existen
+    if (!localStorage.getItem('chorrodeml_datos')) {
+        guardarDatosLocales();
+    }
+    
     // Cargar datos iniciales
     ordenarDatos('fecha');
     
@@ -130,4 +282,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Configurar búsqueda
     const campoBusqueda = document.getElementById('busqueda');
     campoBusqueda.addEventListener('input', filtrarDatos);
+    
+    // Configurar botón para agregar nueva transacción
+    document.getElementById('btnAgregarTransaccion').addEventListener('click', abrirModalCreacion);
+    
+    // Configurar botón para guardar transacción
+    document.getElementById('btnGuardarTransaccion').addEventListener('click', guardarTransaccion);
+    
+    // Configurar botón para confirmar eliminación
+    document.getElementById('btnConfirmarEliminar').addEventListener('click', eliminarTransaccion);
 }); 

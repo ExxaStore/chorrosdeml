@@ -1,24 +1,69 @@
+:root {
+    --ml-yellow: #fff159;
+    --ml-blue: #3483fa;
+    --ml-blue-dark: #2968c8;
+    --ml-text: #333333;
+    --ml-light-grey: #ebebeb;
+    --ml-grey: #ededed;
+}
+
 body {
-    background-color: #f8f9fa;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--ml-light-grey);
+    font-family: 'Proxima Nova', -apple-system, 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
+    color: var(--ml-text);
+}
+
+/* Navbar estilo MercadoLibre */
+.ml-navbar {
+    background-color: var(--ml-yellow);
+    padding: 12px 0;
+    box-shadow: 0 1px 0 0 rgba(0,0,0,.1);
+}
+
+.navbar-brand h2 {
+    color: var(--ml-text);
+    font-weight: 500;
+    font-size: 24px;
+}
+
+.input-group {
+    width: 350px;
+}
+
+.btn-primary {
+    background-color: var(--ml-blue);
+    border-color: var(--ml-blue);
+}
+
+.btn-primary:hover {
+    background-color: var(--ml-blue-dark);
+    border-color: var(--ml-blue-dark);
 }
 
 .card {
-    border-radius: 10px;
+    border-radius: 6px;
     overflow: hidden;
     border: none;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
 }
 
 .card-header {
-    background-color: #4e73df;
-    color: white;
+    background-color: white;
+    border-bottom: 1px solid rgba(0,0,0,.1);
+    padding: 16px;
+}
+
+.table {
+    margin-bottom: 0;
 }
 
 .table thead th {
     position: relative;
     cursor: pointer;
-    background-color: #f1f5fd;
+    background-color: white;
     padding-right: 30px;
+    font-weight: 500;
+    border-bottom: 1px solid rgba(0,0,0,.1);
 }
 
 .sortable i {
@@ -27,6 +72,7 @@ body {
     top: 50%;
     transform: translateY(-50%);
     opacity: 0.5;
+    color: var(--ml-blue);
 }
 
 .sortable.asc i, .sortable.desc i {
@@ -42,11 +88,67 @@ body {
 }
 
 .table tbody tr:hover {
-    background-color: rgba(78, 115, 223, 0.05);
+    background-color: rgba(52, 131, 250, 0.05);
 }
 
-.table {
-    margin-bottom: 0;
+/* Estilos para botones de acción */
+.btn-action {
+    padding: 4px 8px;
+    margin: 0 2px;
+    color: var(--ml-text);
+    background-color: white;
+    border: 1px solid rgba(0,0,0,.1);
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.btn-action:hover {
+    color: var(--ml-blue);
+    border-color: var(--ml-blue);
+}
+
+.btn-action-edit {
+    color: var(--ml-blue);
+}
+
+.btn-action-delete {
+    color: #f73;
+}
+
+/* Estilos para modal */
+.modal-content {
+    border-radius: 6px;
+    border: none;
+}
+
+.modal-header {
+    background-color: var(--ml-blue);
+    color: white;
+    border-bottom: none;
+}
+
+.modal-title {
+    font-weight: 500;
+}
+
+.btn-close {
+    filter: brightness(0) invert(1);
+}
+
+.form-label {
+    font-weight: 400;
+    color: #666;
+}
+
+.form-control {
+    border-radius: 6px;
+    border-color: #e6e6e6;
+    padding: 10px 12px;
+}
+
+.form-control:focus {
+    border-color: var(--ml-blue);
+    box-shadow: 0 0 0 0.25rem rgba(52, 131, 250, 0.25);
 }
 
 @media (max-width: 768px) {
@@ -55,8 +157,22 @@ body {
         margin-top: 10px;
     }
     
-    .card-header {
+    .navbar-brand h2 {
+        font-size: 18px;
+    }
+    
+    .ml-navbar .container {
         flex-direction: column;
         align-items: start !important;
+    }
+    
+    .ml-navbar .d-flex {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    #btnAgregarTransaccion {
+        margin-top: 10px;
+        width: 100%;
     }
 } 

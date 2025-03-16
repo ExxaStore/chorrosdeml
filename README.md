@@ -1,18 +1,25 @@
-# Sistema de Gestión de Ventas y Devoluciones
+# Chorros de Mercadolibre
 
-Una aplicación web para visualizar y gestionar datos de ventas y devoluciones, con capacidad de ordenamiento y búsqueda.
+Una aplicación web para gestionar y visualizar datos de ventas y devoluciones de MercadoLibre, con funcionalidad CRUD completa.
 
 ## Características
 
+- Diseño inspirado en MercadoLibre Argentina
 - Visualización de datos en formato de tabla
 - Ordenamiento por cualquier columna (ascendente/descendente)
 - Búsqueda en tiempo real sobre todos los campos
+- Funcionalidad CRUD completa:
+  - **C**reate: Añadir nuevas transacciones
+  - **R**ead: Visualizar todas las transacciones
+  - **U**pdate: Editar transacciones existentes
+  - **D**elete: Eliminar transacciones
+- Persistencia de datos usando localStorage
 - Diseño responsivo para adaptarse a diferentes dispositivos
 - Datos formateados para mejor visualización (fechas, montos)
 
 ## Estructura de datos
 
-La aplicación muestra los siguientes campos para cada transacción:
+La aplicación gestiona los siguientes campos para cada transacción:
 
 - **Fecha:** Fecha de la transacción
 - **Nro Venta ML:** Número de referencia de la venta en MercadoLibre
@@ -29,8 +36,9 @@ La aplicación muestra los siguientes campos para cada transacción:
 
 1. Abra el archivo `index.html` en cualquier navegador web moderno
 2. Para ordenar los datos, haga clic en el encabezado de la columna deseada
-3. Para buscar, escriba en el campo de búsqueda en la parte superior de la tabla
-4. La búsqueda se realiza en tiempo real sobre todos los campos
+3. Para buscar, escriba en el campo de búsqueda en la parte superior
+4. Para agregar una transacción, haga clic en "Nueva transacción"
+5. Para editar o eliminar, utilice los botones de acción en cada fila
 
 ## Tecnologías utilizadas
 
@@ -39,6 +47,15 @@ La aplicación muestra los siguientes campos para cada transacción:
 - JavaScript (ES6+)
 - Bootstrap 5.3
 - Bootstrap Icons
+- LocalStorage para persistencia de datos
+
+## Implementación en servidor
+
+Para implementar esta aplicación en un servidor web:
+
+1. Suba todos los archivos a su servidor web o hosting
+2. No se requiere configuración especial del servidor ya que es una aplicación de cliente puro
+3. Alternativas de hosting gratuito: GitHub Pages, Netlify, Vercel, Firebase Hosting
 
 ## Desarrollo
 
