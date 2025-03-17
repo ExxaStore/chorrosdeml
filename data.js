@@ -11,7 +11,7 @@ const datosTransacciones = [
         ventaDolares: 450,
         razonDevolucion: "Producto defectuoso",
         itemDevuelto: "Teléfono completo",
-        prueba: "https://images.samsung.com/is/image/samsung/p6pim/ar/galaxy-s21/gallery/ar-galaxy-s21-5g-g991-sm-g991bzalaro-thumb-368338193"
+        prueba: "https://i.imgur.com/HlVVTrf.jpg"
     },
     {
         fecha: "2024-03-05",
@@ -24,7 +24,7 @@ const datosTransacciones = [
         ventaDolares: 850,
         razonDevolucion: "No cumple expectativas",
         itemDevuelto: "Laptop y accesorios",
-        prueba: "https://www.lenovo.com/medias/lenovo-laptops-thinkpad-x1-carbon-gen-9-14-series-front-logo.png?context=bWFzdGVyfHJvb3R8MzE3Nzl8aW1hZ2UvcG5nfGg0NC9oZDQvMTMxNjQ1OTY4ODk2MzAucG5nfDQxM2M4YWZhNTQwNWQxZWE2NjdjYjI4YmJiZmQwODc2MDA5NjkzNWRkY2I1ZTcyYWQ2ZjIxMzUxM2RkYWRmMTE"
+        prueba: "https://i.imgur.com/Gi8tBUd.jpg"
     },
     {
         fecha: "2024-01-23",
@@ -37,7 +37,7 @@ const datosTransacciones = [
         ventaDolares: 220,
         razonDevolucion: "Entrega incorrecta",
         itemDevuelto: "Producto sellado",
-        prueba: "https://www.sony.com.ar/image/cb82ab5df57fa5eb21c6894e97e35994?fmt=png-alpha&wid=660"
+        prueba: "https://i.imgur.com/7KbCGy4.jpg"
     },
     {
         fecha: "2024-04-10",
@@ -50,7 +50,7 @@ const datosTransacciones = [
         ventaDolares: 180,
         razonDevolucion: "Mejor oferta",
         itemDevuelto: "Monitor con base",
-        prueba: "https://www.lg.com/ar/images/monitores/md07529913/gallery/D-02.jpg"
+        prueba: "https://i.imgur.com/IYWQzTR.jpg"
     },
     {
         fecha: "2024-02-28",
@@ -63,7 +63,7 @@ const datosTransacciones = [
         ventaDolares: 75,
         razonDevolucion: "No compatible",
         itemDevuelto: "Teclado en caja",
-        prueba: "https://redragon.es/content/uploads/2021/10/REDRAGON-TECLADO-K552-KUMARA-RAINBOW-3.png"
+        prueba: "https://i.imgur.com/hJTCsaS.jpg"
     }
 ];
 
@@ -291,7 +291,7 @@ function abrirModalEdicion(index) {
     preview.innerHTML = '';
     
     // Si hay una imagen, mostrarla en la vista previa
-    if (transaccion.prueba && transaccion.prueba.startsWith('data:image')) {
+    if (transaccion.prueba && (transaccion.prueba.startsWith('data:image') || transaccion.prueba.startsWith('http'))) {
         const img = document.createElement('img');
         img.src = transaccion.prueba;
         img.classList.add('img-thumbnail', 'mt-2');
