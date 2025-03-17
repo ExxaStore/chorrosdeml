@@ -11,7 +11,7 @@ const datosTransacciones = [
         ventaDolares: 450,
         razonDevolucion: "Producto defectuoso",
         itemDevuelto: "Teléfono completo",
-        prueba: "https://i.imgur.com/HlVVTrf.jpg"
+        prueba: "https://picsum.photos/200/300?random=1"
     },
     {
         fecha: "2024-03-05",
@@ -24,7 +24,7 @@ const datosTransacciones = [
         ventaDolares: 850,
         razonDevolucion: "No cumple expectativas",
         itemDevuelto: "Laptop y accesorios",
-        prueba: "https://i.imgur.com/Gi8tBUd.jpg"
+        prueba: "https://picsum.photos/200/300?random=2"
     },
     {
         fecha: "2024-01-23",
@@ -37,7 +37,7 @@ const datosTransacciones = [
         ventaDolares: 220,
         razonDevolucion: "Entrega incorrecta",
         itemDevuelto: "Producto sellado",
-        prueba: "https://i.imgur.com/7KbCGy4.jpg"
+        prueba: "https://picsum.photos/200/300?random=3"
     },
     {
         fecha: "2024-04-10",
@@ -50,7 +50,7 @@ const datosTransacciones = [
         ventaDolares: 180,
         razonDevolucion: "Mejor oferta",
         itemDevuelto: "Monitor con base",
-        prueba: "https://i.imgur.com/IYWQzTR.jpg"
+        prueba: "https://picsum.photos/200/300?random=4"
     },
     {
         fecha: "2024-02-28",
@@ -63,7 +63,7 @@ const datosTransacciones = [
         ventaDolares: 75,
         razonDevolucion: "No compatible",
         itemDevuelto: "Teclado en caja",
-        prueba: "https://i.imgur.com/hJTCsaS.jpg"
+        prueba: "https://picsum.photos/200/300?random=5"
     }
 ];
 
