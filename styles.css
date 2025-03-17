@@ -13,11 +13,45 @@ body {
     color: var(--ml-text);
 }
 
+/* Barra de autenticación */
+.auth-bar {
+    background-color: white;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(0,0,0,.1);
+    font-size: 14px;
+}
+
+.auth-bar .btn-link {
+    color: var(--ml-blue);
+    text-decoration: none;
+    padding: 0 10px;
+}
+
+.auth-bar .btn-link:hover {
+    color: var(--ml-blue-dark);
+    text-decoration: underline;
+}
+
+#username-display {
+    color: var(--ml-text);
+}
+
 /* Navbar estilo MercadoLibre */
 .ml-navbar {
     background-color: var(--ml-yellow);
     padding: 12px 0;
     box-shadow: 0 1px 0 0 rgba(0,0,0,.1);
+}
+
+.ml-logo {
+    height: 34px;
+    width: auto;
+}
+
+.ml-brand-text {
+    color: var(--ml-blue);
+    font-weight: 600;
+    font-size: 24px;
 }
 
 .navbar-brand h2 {
@@ -57,13 +91,28 @@ body {
     margin-bottom: 0;
 }
 
+/* Cabecera de tabla estilo MercadoLibre */
+.ml-table-header {
+    background-color: var(--ml-blue);
+    color: white;
+}
+
+.ml-table-header th {
+    font-weight: 500;
+    border-bottom: none;
+}
+
 .table thead th {
     position: relative;
     cursor: pointer;
-    background-color: white;
     padding-right: 30px;
     font-weight: 500;
     border-bottom: 1px solid rgba(0,0,0,.1);
+}
+
+.ml-table-header .sortable i {
+    color: white;
+    opacity: 0.7;
 }
 
 .sortable i {
@@ -163,6 +212,14 @@ body {
 }
 
 @media (max-width: 768px) {
+    .ml-logo {
+        height: 28px;
+    }
+    
+    .ml-brand-text {
+        font-size: 18px;
+    }
+    
     .input-group {
         width: 100% !important;
         margin-top: 10px;

@@ -9,11 +9,26 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Barra de autenticación -->
+    <div class="auth-bar">
+        <div class="container d-flex justify-content-end">
+            <div id="auth-guest" class="auth-options">
+                <button class="btn btn-sm btn-link" data-bs-toggle="modal" data-bs-target="#loginModal">Ingresar</button>
+                <button class="btn btn-sm btn-link" data-bs-toggle="modal" data-bs-target="#registroModal">Crear cuenta</button>
+            </div>
+            <div id="auth-user" class="auth-options d-none">
+                <span id="username-display" class="me-2"></span>
+                <button id="btnLogout" class="btn btn-sm btn-link">Salir</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Navbar estilo MercadoLibre -->
     <nav class="navbar navbar-expand-lg ml-navbar">
         <div class="container">
-            <a class="navbar-brand" href="#">
-                <h2 class="mb-0">Chorros de Mercadolibre</h2>
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="https://http2.mlstatic.com/frontend-assets/ml-web-navigation/ui-navigation/5.21.22/mercadolibre/logo__large_plus.png" alt="Logo ML" class="ml-logo me-2">
+                <h2 class="mb-0 ml-brand-text">Chorros de Mercadolibre</h2>
             </a>
             <div class="d-flex align-items-center">
                 <div class="input-group me-3">
@@ -34,7 +49,7 @@
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover" id="tablaDatos">
-                        <thead class="table-light">
+                        <thead class="ml-table-header">
                             <tr>
                                 <th data-key="fecha" class="sortable">Fecha <i class="bi bi-arrow-down-up"></i></th>
                                 <th data-key="nroVenta" class="sortable">Nro Venta ML <i class="bi bi-arrow-down-up"></i></th>
@@ -146,6 +161,70 @@
         </div>
     </div>
 
+    <!-- Modal de Login -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Iniciar sesión</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="loginEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="loginEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="loginPassword" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="loginPassword" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnLogin">Ingresar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Registro -->
+    <div class="modal fade" id="registroModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Crear cuenta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="registroForm">
+                        <div class="mb-3">
+                            <label for="registroNombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="registroNombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="registroEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="registroEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="registroPassword" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="registroPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="registroConfirmPassword" class="form-label">Confirmar contraseña</label>
+                            <input type="password" class="form-control" id="registroConfirmPassword" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnRegistro">Registrarse</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="data.js"></script>
     <script src="script.js"></script>
@@ -162,6 +241,8 @@
                 // Hacer disponibles los modales como variables globales para fácil acceso
                 window.transaccionModal = new bootstrap.Modal(document.getElementById('transaccionModal'));
                 window.eliminarModal = new bootstrap.Modal(document.getElementById('eliminarModal'));
+                window.loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+                window.registroModal = new bootstrap.Modal(document.getElementById('registroModal'));
                 
                 // Verificar que el botón de nueva transacción funcione
                 document.getElementById('btnAgregarTransaccion').addEventListener('click', function() {
@@ -172,10 +253,68 @@
                         console.error('Modal no encontrado');
                     }
                 });
+
+                // Configurar eventos de autenticación
+                document.getElementById('btnLogin').addEventListener('click', function() {
+                    const email = document.getElementById('loginEmail').value;
+                    const password = document.getElementById('loginPassword').value;
+                    
+                    if (email && password) {
+                        // Simular login exitoso
+                        localStorage.setItem('chorrodeml_user', JSON.stringify({
+                            email: email,
+                            name: email.split('@')[0]
+                        }));
+                        
+                        updateAuthUI();
+                        window.loginModal.hide();
+                    }
+                });
+                
+                document.getElementById('btnRegistro').addEventListener('click', function() {
+                    const nombre = document.getElementById('registroNombre').value;
+                    const email = document.getElementById('registroEmail').value;
+                    const password = document.getElementById('registroPassword').value;
+                    const confirmPassword = document.getElementById('registroConfirmPassword').value;
+                    
+                    if (nombre && email && password && password === confirmPassword) {
+                        // Simular registro exitoso
+                        localStorage.setItem('chorrodeml_user', JSON.stringify({
+                            email: email,
+                            name: nombre
+                        }));
+                        
+                        updateAuthUI();
+                        window.registroModal.hide();
+                    }
+                });
+                
+                document.getElementById('btnLogout').addEventListener('click', function() {
+                    localStorage.removeItem('chorrodeml_user');
+                    updateAuthUI();
+                });
+                
+                // Actualizar UI de autenticación al cargar
+                updateAuthUI();
             } else {
                 console.error('Bootstrap no está disponible. Verifica la carga de bootstrap.bundle.min.js');
             }
         });
+        
+        // Función para actualizar la UI según el estado de autenticación
+        function updateAuthUI() {
+            const userStr = localStorage.getItem('chorrodeml_user');
+            
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                document.getElementById('username-display').textContent = user.name;
+                document.getElementById('auth-guest').classList.add('d-none');
+                document.getElementById('auth-user').classList.remove('d-none');
+            } else {
+                document.getElementById('auth-guest').classList.remove('d-none');
+                document.getElementById('auth-user').classList.add('d-none');
+            }
+        }
     </script>
 </body>
 </html> 
