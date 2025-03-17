@@ -51,6 +51,10 @@ body {
     width: auto;
     object-fit: contain;
     background: transparent;
+    margin: 0;
+    padding: 0;
+    border: none;
+    box-shadow: none;
 }
 
 .ml-brand-text {

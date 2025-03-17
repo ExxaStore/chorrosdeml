@@ -11,7 +11,7 @@ const datosTransacciones = [
         ventaDolares: 450,
         razonDevolucion: "Producto defectuoso",
         itemDevuelto: "Teléfono completo",
-        prueba: ""
+        prueba: "https://images.samsung.com/is/image/samsung/p6pim/ar/galaxy-s21/gallery/ar-galaxy-s21-5g-g991-sm-g991bzalaro-thumb-368338193"
     },
     {
         fecha: "2024-03-05",
@@ -24,7 +24,7 @@ const datosTransacciones = [
         ventaDolares: 850,
         razonDevolucion: "No cumple expectativas",
         itemDevuelto: "Laptop y accesorios",
-        prueba: ""
+        prueba: "https://www.lenovo.com/medias/lenovo-laptops-thinkpad-x1-carbon-gen-9-14-series-front-logo.png?context=bWFzdGVyfHJvb3R8MzE3Nzl8aW1hZ2UvcG5nfGg0NC9oZDQvMTMxNjQ1OTY4ODk2MzAucG5nfDQxM2M4YWZhNTQwNWQxZWE2NjdjYjI4YmJiZmQwODc2MDA5NjkzNWRkY2I1ZTcyYWQ2ZjIxMzUxM2RkYWRmMTE"
     },
     {
         fecha: "2024-01-23",
@@ -37,7 +37,7 @@ const datosTransacciones = [
         ventaDolares: 220,
         razonDevolucion: "Entrega incorrecta",
         itemDevuelto: "Producto sellado",
-        prueba: ""
+        prueba: "https://www.sony.com.ar/image/cb82ab5df57fa5eb21c6894e97e35994?fmt=png-alpha&wid=660"
     },
     {
         fecha: "2024-04-10",
@@ -50,7 +50,7 @@ const datosTransacciones = [
         ventaDolares: 180,
         razonDevolucion: "Mejor oferta",
         itemDevuelto: "Monitor con base",
-        prueba: ""
+        prueba: "https://www.lg.com/ar/images/monitores/md07529913/gallery/D-02.jpg"
     },
     {
         fecha: "2024-02-28",
@@ -63,7 +63,7 @@ const datosTransacciones = [
         ventaDolares: 75,
         razonDevolucion: "No compatible",
         itemDevuelto: "Teclado en caja",
-        prueba: ""
+        prueba: "https://redragon.es/content/uploads/2021/10/REDRAGON-TECLADO-K552-KUMARA-RAINBOW-3.png"
     }
 ];
 
@@ -119,7 +119,7 @@ function cargarDatos(datosMostrar = datos) {
             { 
                 key: 'prueba', 
                 formato: val => {
-                    if (val && val.startsWith('data:image')) {
+                    if (val && (val.startsWith('data:image') || val.startsWith('http'))) {
                         return `<img src="${val}" class="img-thumbnail-preview" style="max-height: 50px; cursor: pointer;" />`;
                     }
                     return '-';
