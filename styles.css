@@ -100,6 +100,10 @@ body {
     color: white !important;
 }
 
+thead tr.ml-table-header {
+    background-color: var(--ml-navy) !important;
+}
+
 .ml-table-header th {
     font-weight: 500;
     border-bottom: none;
@@ -120,6 +124,12 @@ tr.ml-table-header th {
     border-bottom: none;
     text-align: center;
     vertical-align: middle;
+}
+
+/* Forzar estilos de bootstrap */
+.table-bordered > thead > tr.ml-table-header > th {
+    background-color: var(--ml-navy) !important;
+    color: white !important;
 }
 
 .table thead th {

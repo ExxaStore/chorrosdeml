@@ -55,7 +55,7 @@ function cargarDatos(datos) {
         
         // Preparar la celda para la prueba (imagen)
         let pruebaHTML = '-';
-        if (item.prueba) {
+        if (item.prueba && item.prueba.startsWith('data:image')) {
             pruebaHTML = `<img src="${item.prueba}" alt="Imagen de prueba" class="img-thumbnail-preview">`;
         }
         
@@ -236,7 +236,7 @@ function abrirModalEdicion(index) {
     preview.innerHTML = '';
     
     // Si hay una imagen, mostrarla en la vista previa
-    if (transaccion.prueba) {
+    if (transaccion.prueba && transaccion.prueba.startsWith('data:image')) {
         const img = document.createElement('img');
         img.src = transaccion.prueba;
         img.classList.add('img-thumbnail', 'mt-2');
@@ -306,10 +306,12 @@ function guardarTransaccion() {
         const reader = new FileReader();
         
         reader.onload = function(e) {
+            // Guardar directamente el resultado en base64
             transaccion.prueba = e.target.result;
             finalizarGuardado();
         };
         
+        // Leer como URL de datos (base64)
         reader.readAsDataURL(inputImagen.files[0]);
     } else {
         // Si estamos en modo edición, mantener la imagen existente
