@@ -3,6 +3,14 @@ let datos = localStorage.getItem('chorrodeml_datos') ?
     JSON.parse(localStorage.getItem('chorrodeml_datos')) : 
     [...datosTransacciones];
 
+// Limpiar todos los datos del campo "Prueba" al cargar la primera vez
+if (!localStorage.getItem('chorrodeml_datos')) {
+    datos.forEach(item => {
+        item.prueba = '';
+    });
+    guardarDatosLocales();
+}
+
 let ordenActual = {
     columna: 'fecha',
     direccion: 'desc'
@@ -45,6 +53,12 @@ function cargarDatos(datos) {
             currency: 'USD'
         });
         
+        // Preparar la celda para la prueba (imagen)
+        let pruebaHTML = '-';
+        if (item.prueba) {
+            pruebaHTML = `<img src="${item.prueba}" alt="Imagen de prueba" class="img-thumbnail-preview">`;
+        }
+        
         fila.innerHTML = `
             <td>${fechaFormateada}</td>
             <td>${item.nroVenta}</td>
@@ -55,7 +69,7 @@ function cargarDatos(datos) {
             <td>${montoFormateado}</td>
             <td>${item.razonDevolucion || '-'}</td>
             <td>${item.itemDevuelto || '-'}</td>
-            <td>${item.prueba || '-'}</td>
+            <td>${pruebaHTML}</td>
             <td>
                 <button class="btn-action btn-action-edit" data-index="${index}" style="display: ${displayStyle}">
                     <i class="bi bi-pencil-square"></i>
@@ -216,7 +230,19 @@ function abrirModalEdicion(index) {
     document.getElementById('ventaDolares').value = transaccion.ventaDolares;
     document.getElementById('razonDevolucion').value = transaccion.razonDevolucion || '';
     document.getElementById('itemDevuelto').value = transaccion.itemDevuelto || '';
-    document.getElementById('prueba').value = transaccion.prueba || '';
+    
+    // Limpiar cualquier vista previa anterior
+    const preview = document.getElementById('imagenPreview');
+    preview.innerHTML = '';
+    
+    // Si hay una imagen, mostrarla en la vista previa
+    if (transaccion.prueba) {
+        const img = document.createElement('img');
+        img.src = transaccion.prueba;
+        img.classList.add('img-thumbnail', 'mt-2');
+        img.style.maxHeight = '150px';
+        preview.appendChild(img);
+    }
     
     document.getElementById('transaccionId').value = index;
     modoEdicion = true;
@@ -235,7 +261,11 @@ function guardarTransaccion() {
     }
     
     // Obtener valores del formulario
-    const nuevaTransaccion = {
+    const transaccionId = document.getElementById('transaccionId').value;
+    const inputImagen = document.getElementById('prueba');
+    
+    // Crear objeto base de la transacción
+    const transaccion = {
         fecha: document.getElementById('fecha').value,
         nroVenta: document.getElementById('nroVenta').value,
         nombreCompleto: document.getElementById('nombreCompleto').value,
@@ -245,27 +275,49 @@ function guardarTransaccion() {
         ventaDolares: parseFloat(document.getElementById('ventaDolares').value),
         razonDevolucion: document.getElementById('razonDevolucion').value,
         itemDevuelto: document.getElementById('itemDevuelto').value,
-        prueba: document.getElementById('prueba').value
+        prueba: ''
     };
     
-    if (modoEdicion) {
-        // Modo edición - actualizar transacción existente
-        const index = document.getElementById('transaccionId').value;
-        datos[index] = nuevaTransaccion;
+    // Función para continuar el guardado después de procesar la imagen
+    const finalizarGuardado = () => {
+        if (modoEdicion) {
+            // Actualizar transacción existente
+            datos[transaccionId] = transaccion;
+            debug('Transacción actualizada', transaccion);
+        } else {
+            // Agregar nueva transacción
+            datos.unshift(transaccion);
+            debug('Nueva transacción agregada', transaccion);
+        }
+        
+        // Guardar en localStorage
+        guardarDatosLocales();
+        
+        // Reordenar y recargar la tabla
+        ordenarDatos(ordenActual.columna);
+        
+        // Cerrar el modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('transaccionModal'));
+        modal.hide();
+    };
+    
+    // Procesar la imagen si hay un archivo seleccionado
+    if (inputImagen.files && inputImagen.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            transaccion.prueba = e.target.result;
+            finalizarGuardado();
+        };
+        
+        reader.readAsDataURL(inputImagen.files[0]);
     } else {
-        // Modo creación - agregar nueva transacción
-        datos.push(nuevaTransaccion);
+        // Si estamos en modo edición, mantener la imagen existente
+        if (modoEdicion) {
+            transaccion.prueba = datos[transaccionId].prueba || '';
+        }
+        finalizarGuardado();
     }
-    
-    // Guardar cambios en localStorage
-    guardarDatosLocales();
-    
-    // Cerrar el modal
-    const transaccionModal = bootstrap.Modal.getInstance(document.getElementById('transaccionModal'));
-    transaccionModal.hide();
-    
-    // Reordenar y mostrar datos actualizados
-    ordenarDatos(ordenActual.columna);
 }
 
 // Función para abrir el modal de confirmación de eliminación

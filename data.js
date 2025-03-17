@@ -10,7 +10,7 @@ const datosTransacciones = [
         ventaDolares: 450,
         razonDevolucion: "Producto defectuoso",
         itemDevuelto: "Teléfono completo",
-        prueba: "Fotos del producto"
+        prueba: ""
     },
     {
         fecha: "2024-03-05",
@@ -22,7 +22,7 @@ const datosTransacciones = [
         ventaDolares: 850,
         razonDevolucion: "No cumple expectativas",
         itemDevuelto: "Laptop y accesorios",
-        prueba: "Correo de reclamo"
+        prueba: ""
     },
     {
         fecha: "2024-01-23",
@@ -34,7 +34,7 @@ const datosTransacciones = [
         ventaDolares: 220,
         razonDevolucion: "Entrega incorrecta",
         itemDevuelto: "Producto sellado",
-        prueba: "Ticket de compra"
+        prueba: ""
     },
     {
         fecha: "2024-04-10",
@@ -46,7 +46,7 @@ const datosTransacciones = [
         ventaDolares: 180,
         razonDevolucion: "Mejor oferta",
         itemDevuelto: "Monitor con base",
-        prueba: "Screenshot de oferta"
+        prueba: ""
     },
     {
         fecha: "2024-02-28",
@@ -58,7 +58,7 @@ const datosTransacciones = [
         ventaDolares: 75,
         razonDevolucion: "No compatible",
         itemDevuelto: "Teclado en caja",
-        prueba: "Video demostración"
+        prueba: ""
     },
     {
         fecha: "2024-03-15",
@@ -70,7 +70,7 @@ const datosTransacciones = [
         ventaDolares: 950,
         razonDevolucion: "Arrepentimiento",
         itemDevuelto: "Tablet y accesorios",
-        prueba: "Formulario de devolución"
+        prueba: ""
     },
     {
         fecha: "2024-01-05",
@@ -82,7 +82,7 @@ const datosTransacciones = [
         ventaDolares: 550,
         razonDevolucion: "Fallo técnico",
         itemDevuelto: "Consola completa",
-        prueba: "Informe técnico"
+        prueba: ""
     },
     {
         fecha: "2024-04-20",
@@ -94,7 +94,7 @@ const datosTransacciones = [
         ventaDolares: 1200,
         razonDevolucion: "Producto incorrecto",
         itemDevuelto: "Cámara y lentes",
-        prueba: "Comparación de modelos"
+        prueba: ""
     },
     {
         fecha: "2024-02-10",
@@ -106,7 +106,7 @@ const datosTransacciones = [
         ventaDolares: 320,
         razonDevolucion: "Tamaño incorrecto",
         itemDevuelto: "Reloj con correa",
-        prueba: "Chat con vendedor"
+        prueba: ""
     },
     {
         fecha: "2024-03-30",
@@ -118,7 +118,7 @@ const datosTransacciones = [
         ventaDolares: 130,
         razonDevolucion: "Talla incorrecta",
         itemDevuelto: "Calzado en caja",
-        prueba: "Foto comparativa"
+        prueba: ""
     },
     {
         fecha: "2024-01-15",
@@ -130,7 +130,7 @@ const datosTransacciones = [
         ventaDolares: 85,
         razonDevolucion: "Mejor modelo",
         itemDevuelto: "Producto completo",
-        prueba: "Factura de compra"
+        prueba: ""
     },
     {
         fecha: "2024-04-05",
@@ -142,6 +142,6 @@ const datosTransacciones = [
         ventaDolares: 160,
         razonDevolucion: "Color equivocado",
         itemDevuelto: "Silla embalada",
-        prueba: "Confirmación de pedido"
+        prueba: ""
     }
 ]; 
