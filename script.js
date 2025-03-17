@@ -1,15 +1,80 @@
+// Datos iniciales para la aplicación (5 registros)
+const datosTransacciones = [
+    {
+        fecha: "2024-04-15",
+        nroVenta: "ML-23589741",
+        nombreCompleto: "María González",
+        usuario: "mariagonzalez",
+        documento: "28.456.123",
+        direccion: "Av. Corrientes 1234, CABA",
+        producto: "Smartphone Samsung Galaxy S21",
+        ventaDolares: 450,
+        razonDevolucion: "Producto defectuoso",
+        itemDevuelto: "Teléfono completo",
+        prueba: ""
+    },
+    {
+        fecha: "2024-03-25",
+        nroVenta: "ML-78452156",
+        nombreCompleto: "Juan Rodríguez",
+        usuario: "jrodriguez85",
+        documento: "32.789.654",
+        direccion: "Calle 9 de Julio 789, Córdoba",
+        producto: "Laptop Lenovo ThinkPad",
+        ventaDolares: 850,
+        razonDevolucion: "No cumple expectativas",
+        itemDevuelto: "Laptop y accesorios",
+        prueba: ""
+    },
+    {
+        fecha: "2024-03-10",
+        nroVenta: "ML-96325874",
+        nombreCompleto: "Carlos Martínez",
+        usuario: "cmartinez_22",
+        documento: "25.369.147",
+        direccion: "Calle San Martín 369, Mendoza",
+        producto: "Auriculares Sony WH-1000XM4",
+        ventaDolares: 220,
+        razonDevolucion: "Entrega incorrecta",
+        itemDevuelto: "Producto sellado",
+        prueba: ""
+    },
+    {
+        fecha: "2024-04-01",
+        nroVenta: "ML-41236587",
+        nombreCompleto: "Ana Pérez",
+        usuario: "anaperez_oficial",
+        documento: "29.587.412",
+        direccion: "Av. Belgrano 2541, Rosario",
+        producto: "Monitor LG 27''",
+        ventaDolares: 180,
+        razonDevolucion: "Mejor oferta",
+        itemDevuelto: "Monitor con base",
+        prueba: ""
+    },
+    {
+        fecha: "2024-02-15",
+        nroVenta: "ML-14789632",
+        nombreCompleto: "Roberto Sánchez",
+        usuario: "rober_sanchez",
+        documento: "35.741.258",
+        direccion: "Calle Rivadavia 741, Mar del Plata",
+        producto: "Teclado Mecánico Redragon",
+        ventaDolares: 75,
+        razonDevolucion: "No compatible",
+        itemDevuelto: "Teclado en caja",
+        prueba: ""
+    }
+];
+
 // Variables globales
 let datos = localStorage.getItem('chorrodeml_datos') ? 
     JSON.parse(localStorage.getItem('chorrodeml_datos')) : 
     [...datosTransacciones];
 
-// Limpiar todos los datos del campo "Prueba" al cargar la primera vez
-if (!localStorage.getItem('chorrodeml_datos')) {
-    datos.forEach(item => {
-        item.prueba = '';
-    });
-    guardarDatosLocales();
-}
+// Limpiar localStorage al cargar para asegurar que se muestran los datos actualizados
+localStorage.removeItem('chorrodeml_datos');
+guardarDatosLocales();
 
 let ordenActual = {
     columna: 'fecha',
@@ -30,85 +95,81 @@ function guardarDatosLocales() {
 }
 
 // Función para cargar los datos en la tabla
-function cargarDatos(datos) {
-    debug('Cargando datos en la tabla', datos.length + ' registros');
-    const tablaCuerpo = document.getElementById('tablaCuerpo');
-    tablaCuerpo.innerHTML = '';
-
-    // Verificar si el usuario está autenticado
-    const userStr = localStorage.getItem('chorrodeml_user');
-    const isLoggedIn = !!userStr;
-    const displayStyle = isLoggedIn ? 'inline-flex' : 'none';
-
-    datos.forEach((item, index) => {
+function cargarDatos(datosMostrar = datos) {
+    const tabla = document.getElementById('tablaCuerpo');
+    tabla.innerHTML = '';
+    
+    datosMostrar.forEach((item, index) => {
         const fila = document.createElement('tr');
         
-        // Formatear la fecha para visualización
-        const fecha = new Date(item.fecha);
-        const fechaFormateada = fecha.toLocaleDateString('es-ES');
+        // Columnas de datos
+        const columnas = [
+            { key: 'fecha', formato: val => val },
+            { key: 'nroVenta', formato: val => val },
+            { key: 'nombreCompleto', formato: val => val },
+            { key: 'usuario', formato: val => val },
+            { key: 'documento', formato: val => val },
+            { key: 'direccion', formato: val => val },
+            { key: 'producto', formato: val => val },
+            { key: 'ventaDolares', formato: val => `U$D ${val.toFixed(2)}` },
+            { key: 'razonDevolucion', formato: val => val || '-' },
+            { key: 'itemDevuelto', formato: val => val || '-' },
+            { 
+                key: 'prueba', 
+                formato: val => {
+                    if (val && val.startsWith('data:image')) {
+                        return `<img src="${val}" class="img-thumbnail-preview" style="max-height: 50px; cursor: pointer;" />`;
+                    }
+                    return '-';
+                } 
+            }
+        ];
         
-        // Formatear el monto para visualización
-        const montoFormateado = item.ventaDolares.toLocaleString('es-ES', {
-            style: 'currency',
-            currency: 'USD'
+        // Agregar las celdas de datos
+        columnas.forEach(col => {
+            const celda = document.createElement('td');
+            celda.innerHTML = col.formato(item[col.key]);
+            fila.appendChild(celda);
         });
         
-        // Preparar la celda para la prueba (imagen)
-        let pruebaHTML = '-';
-        if (item.prueba && item.prueba.startsWith('data:image')) {
-            pruebaHTML = `<img src="${item.prueba}" alt="Imagen de prueba" class="img-thumbnail-preview">`;
-        }
+        // Columna de acciones
+        const celdaAcciones = document.createElement('td');
+        celdaAcciones.className = 'd-flex justify-content-around';
         
-        fila.innerHTML = `
-            <td>${fechaFormateada}</td>
-            <td>${item.nroVenta}</td>
-            <td>${item.nombreCompleto}</td>
-            <td>${item.documento}</td>
-            <td>${item.direccion}</td>
-            <td>${item.producto}</td>
-            <td>${montoFormateado}</td>
-            <td>${item.razonDevolucion || '-'}</td>
-            <td>${item.itemDevuelto || '-'}</td>
-            <td>${pruebaHTML}</td>
-            <td>
-                <button class="btn-action btn-action-edit" data-index="${index}" style="display: ${displayStyle}">
-                    <i class="bi bi-pencil-square"></i>
-                </button>
-                <button class="btn-action btn-action-delete" data-index="${index}" style="display: ${displayStyle}">
-                    <i class="bi bi-trash"></i>
-                </button>
-            </td>
-        `;
+        // Botón de editar
+        const btnEditar = document.createElement('button');
+        btnEditar.className = 'btn btn-sm btn-outline-primary btn-action';
+        btnEditar.innerHTML = '<i class="bi bi-pencil-square"></i>';
+        btnEditar.style.display = 'none'; // Inicialmente oculto
+        btnEditar.addEventListener('click', () => abrirModalEdicion(index));
         
-        tablaCuerpo.appendChild(fila);
+        // Botón de eliminar
+        const btnEliminar = document.createElement('button');
+        btnEliminar.className = 'btn btn-sm btn-outline-danger btn-action';
+        btnEliminar.innerHTML = '<i class="bi bi-trash"></i>';
+        btnEliminar.style.display = 'none'; // Inicialmente oculto
+        btnEliminar.addEventListener('click', () => abrirModalEliminar(index));
+        
+        celdaAcciones.appendChild(btnEditar);
+        celdaAcciones.appendChild(btnEliminar);
+        fila.appendChild(celdaAcciones);
+        
+        tabla.appendChild(fila);
     });
-
-    // Agregar event listeners a los botones de acción
-    document.querySelectorAll('.btn-action-edit').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const index = e.currentTarget.getAttribute('data-index');
-            debug('Botón editar cliqueado', 'índice: ' + index);
-            abrirModalEdicion(index);
-        });
-    });
-
-    document.querySelectorAll('.btn-action-delete').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const index = e.currentTarget.getAttribute('data-index');
-            debug('Botón eliminar cliqueado', 'índice: ' + index);
-            abrirModalEliminar(index);
-        });
-    });
+    
+    // Actualizar la visibilidad de los botones según autenticación
+    updateAuthUI();
 }
 
 // Función para ordenar los datos
 function ordenarDatos(columna) {
-    // Actualizar la dirección de ordenamiento
     if (ordenActual.columna === columna) {
+        // Invierte la dirección si es la misma columna
         ordenActual.direccion = ordenActual.direccion === 'asc' ? 'desc' : 'asc';
     } else {
+        // Nueva columna, resetea a descendente
         ordenActual.columna = columna;
-        ordenActual.direccion = 'asc';
+        ordenActual.direccion = 'desc';
     }
     
     // Ordenar los datos
@@ -116,44 +177,37 @@ function ordenarDatos(columna) {
         let valorA = a[columna];
         let valorB = b[columna];
         
-        // Conversión específica para ordenamiento de fechas
-        if (columna === 'fecha') {
-            valorA = new Date(valorA);
-            valorB = new Date(valorB);
-        }
+        // Conversión para ordenamiento correcto
+        if (typeof valorA === 'string') valorA = valorA.toLowerCase();
+        if (typeof valorB === 'string') valorB = valorB.toLowerCase();
         
-        // Conversión específica para ordenamiento numérico
-        if (columna === 'ventaDolares') {
-            valorA = Number(valorA);
-            valorB = Number(valorB);
-        }
+        // Aplicar dirección
+        const factor = ordenActual.direccion === 'asc' ? 1 : -1;
         
-        // Ordenamiento por defecto para strings
-        if (typeof valorA === 'string' && typeof valorB === 'string') {
-            return ordenActual.direccion === 'asc' 
-                ? valorA.localeCompare(valorB, 'es', { sensitivity: 'base' })
-                : valorB.localeCompare(valorA, 'es', { sensitivity: 'base' });
-        }
-        
-        // Ordenamiento para otros tipos
-        return ordenActual.direccion === 'asc' 
-            ? valorA - valorB 
-            : valorB - valorA;
+        if (valorA < valorB) return -1 * factor;
+        if (valorA > valorB) return 1 * factor;
+        return 0;
     });
     
-    // Actualizar los indicadores visuales de ordenamiento
+    // Actualizar íconos de ordenamiento
     const encabezados = document.querySelectorAll('.sortable');
     encabezados.forEach(encabezado => {
-        encabezado.classList.remove('asc', 'desc');
+        const icono = encabezado.querySelector('i');
+        const esColumnaActual = encabezado.getAttribute('data-key') === columna;
         
-        const columnaEncabezado = encabezado.getAttribute('data-key');
-        if (columnaEncabezado === columna) {
-            encabezado.classList.add(ordenActual.direccion);
+        if (esColumnaActual) {
+            if (ordenActual.direccion === 'asc') {
+                icono.className = 'bi bi-arrow-up';
+            } else {
+                icono.className = 'bi bi-arrow-down';
+            }
+        } else {
+            icono.className = 'bi bi-arrow-down-up';
         }
     });
     
-    // Recargar la tabla con los datos ordenados
-    cargarDatos(datos);
+    // Cargar datos ordenados
+    cargarDatos();
 }
 
 // Función para filtrar los datos
@@ -194,21 +248,16 @@ function abrirModalCreacion() {
         document.getElementById('transaccionId').value = '';
         modoEdicion = false;
         
-        // Intentar inicializar el modal desde bootstrap o usar la variable global si existe
+        // Intentar mostrar el modal
         try {
-            const modal = new bootstrap.Modal(document.getElementById('transaccionModal'));
-            modal.show();
-            debug('Modal inicializado y mostrado con nueva instancia');
-        } catch (error) {
-            debug('Error al inicializar modal con nueva instancia', error);
-            
-            // Intentar usar la variable global definida en el script adicional
             if (window.transaccionModal) {
                 window.transaccionModal.show();
-                debug('Modal mostrado desde variable global');
             } else {
-                console.error('No se pudo mostrar el modal. Error:', error);
+                const modal = new bootstrap.Modal(document.getElementById('transaccionModal'));
+                modal.show();
             }
+        } catch (error) {
+            console.error('Error al mostrar el modal:', error);
         }
     } catch (error) {
         console.error('Error al abrir modal de creación:', error);
@@ -247,8 +296,17 @@ function abrirModalEdicion(index) {
     document.getElementById('transaccionId').value = index;
     modoEdicion = true;
     
-    const transaccionModal = new bootstrap.Modal(document.getElementById('transaccionModal'));
-    transaccionModal.show();
+    // Intentar mostrar el modal
+    try {
+        if (window.transaccionModal) {
+            window.transaccionModal.show();
+        } else {
+            const modal = new bootstrap.Modal(document.getElementById('transaccionModal'));
+            modal.show();
+        }
+    } catch (error) {
+        console.error('Error al mostrar el modal de edición:', error);
+    }
 }
 
 // Función para guardar una transacción (crear nueva o editar existente)
@@ -264,11 +322,12 @@ function guardarTransaccion() {
     const transaccionId = document.getElementById('transaccionId').value;
     const inputImagen = document.getElementById('prueba');
     
-    // Crear objeto base de la transacción
+    // Crear objeto de la transacción
     const transaccion = {
         fecha: document.getElementById('fecha').value,
         nroVenta: document.getElementById('nroVenta').value,
         nombreCompleto: document.getElementById('nombreCompleto').value,
+        usuario: document.getElementById('nombreCompleto').value.replace(/\s+/g, '').toLowerCase() + Math.floor(Math.random() * 100), // Generar usuario a partir del nombre
         documento: document.getElementById('documento').value,
         direccion: document.getElementById('direccion').value,
         producto: document.getElementById('producto').value,
@@ -278,16 +337,30 @@ function guardarTransaccion() {
         prueba: ''
     };
     
-    // Función para continuar el guardado después de procesar la imagen
-    const finalizarGuardado = () => {
-        if (modoEdicion) {
+    // Procesar imagen si se seleccionó una
+    if (inputImagen.files && inputImagen.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            transaccion.prueba = e.target.result;
+            finalizarGuardado();
+        };
+        reader.readAsDataURL(inputImagen.files[0]);
+    } else {
+        // Si es edición, conservar la imagen anterior
+        if (modoEdicion && transaccionId !== '') {
+            transaccion.prueba = datos[transaccionId].prueba;
+        }
+        finalizarGuardado();
+    }
+    
+    // Función para finalizar el guardado después de procesar la imagen
+    function finalizarGuardado() {
+        if (modoEdicion && transaccionId !== '') {
             // Actualizar transacción existente
             datos[transaccionId] = transaccion;
-            debug('Transacción actualizada', transaccion);
         } else {
             // Agregar nueva transacción
             datos.unshift(transaccion);
-            debug('Nueva transacción agregada', transaccion);
         }
         
         // Guardar en localStorage
@@ -297,36 +370,32 @@ function guardarTransaccion() {
         ordenarDatos(ordenActual.columna);
         
         // Cerrar el modal
-        const modal = bootstrap.Modal.getInstance(document.getElementById('transaccionModal'));
-        modal.hide();
-    };
-    
-    // Procesar la imagen si hay un archivo seleccionado
-    if (inputImagen.files && inputImagen.files[0]) {
-        const reader = new FileReader();
-        
-        reader.onload = function(e) {
-            // Guardar directamente el resultado en base64
-            transaccion.prueba = e.target.result;
-            finalizarGuardado();
-        };
-        
-        // Leer como URL de datos (base64)
-        reader.readAsDataURL(inputImagen.files[0]);
-    } else {
-        // Si estamos en modo edición, mantener la imagen existente
-        if (modoEdicion) {
-            transaccion.prueba = datos[transaccionId].prueba || '';
+        try {
+            if (window.transaccionModal) {
+                window.transaccionModal.hide();
+            } else {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('transaccionModal'));
+                if (modal) modal.hide();
+            }
+        } catch (error) {
+            console.error('Error al cerrar el modal:', error);
         }
-        finalizarGuardado();
     }
 }
 
 // Función para abrir el modal de confirmación de eliminación
 function abrirModalEliminar(index) {
     idTransaccionEliminar = index;
-    const eliminarModal = new bootstrap.Modal(document.getElementById('eliminarModal'));
-    eliminarModal.show();
+    try {
+        if (window.eliminarModal) {
+            window.eliminarModal.show();
+        } else {
+            const modal = new bootstrap.Modal(document.getElementById('eliminarModal'));
+            modal.show();
+        }
+    } catch (error) {
+        console.error('Error al mostrar el modal de eliminación:', error);
+    }
 }
 
 // Función para eliminar una transacción
@@ -339,8 +408,16 @@ function eliminarTransaccion() {
         guardarDatosLocales();
         
         // Cerrar el modal
-        const eliminarModal = bootstrap.Modal.getInstance(document.getElementById('eliminarModal'));
-        eliminarModal.hide();
+        try {
+            if (window.eliminarModal) {
+                window.eliminarModal.hide();
+            } else {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('eliminarModal'));
+                if (modal) modal.hide();
+            }
+        } catch (error) {
+            console.error('Error al cerrar el modal de eliminación:', error);
+        }
         
         // Reordenar y mostrar datos actualizados
         ordenarDatos(ordenActual.columna);
@@ -349,63 +426,37 @@ function eliminarTransaccion() {
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
-    debug('Documento cargado, inicializando la aplicación');
+    // Cargar datos iniciales
+    ordenarDatos('fecha');
     
-    try {
-        // Guardar datos iniciales en localStorage si no existen
-        if (!localStorage.getItem('chorrodeml_datos')) {
-            debug('Guardando datos iniciales en localStorage');
-            guardarDatosLocales();
-        }
-        
-        // Cargar datos iniciales
-        ordenarDatos('fecha');
-        
-        // Configurar eventos de ordenamiento en encabezados
-        const encabezados = document.querySelectorAll('.sortable');
-        encabezados.forEach(encabezado => {
-            encabezado.addEventListener('click', () => {
-                const columna = encabezado.getAttribute('data-key');
-                ordenarDatos(columna);
-            });
+    // Configurar eventos de ordenamiento en encabezados
+    const encabezados = document.querySelectorAll('.sortable');
+    encabezados.forEach(encabezado => {
+        encabezado.addEventListener('click', () => {
+            const columna = encabezado.getAttribute('data-key');
+            ordenarDatos(columna);
         });
-        
-        // Configurar búsqueda
-        const campoBusqueda = document.getElementById('busqueda');
-        campoBusqueda.addEventListener('input', filtrarDatos);
-        
-        // Configurar botón para agregar nueva transacción
-        const btnAgregar = document.getElementById('btnAgregarTransaccion');
-        if (btnAgregar) {
-            debug('Configurando botón para agregar nueva transacción');
-            btnAgregar.addEventListener('click', () => {
-                debug('Botón Nuevo Ladrón cliqueado');
-                abrirModalCreacion();
-            });
-        } else {
-            console.error('Error: No se encontró el botón para agregar transacción');
-        }
-        
-        // Configurar botón para guardar transacción
-        const btnGuardar = document.getElementById('btnGuardarTransaccion');
-        if (btnGuardar) {
-            debug('Configurando botón para guardar transacción');
-            btnGuardar.addEventListener('click', guardarTransaccion);
-        } else {
-            console.error('Error: No se encontró el botón para guardar transacción');
-        }
-        
-        // Configurar botón para confirmar eliminación
-        const btnConfirmar = document.getElementById('btnConfirmarEliminar');
-        if (btnConfirmar) {
-            debug('Configurando botón para confirmar eliminación');
-            btnConfirmar.addEventListener('click', eliminarTransaccion);
-        } else {
-            console.error('Error: No se encontró el botón para confirmar eliminación');
-        }
-        
-        debug('Inicialización completada');
-    } catch (error) {
-        console.error('Error durante la inicialización:', error);
+    });
+    
+    // Configurar búsqueda
+    const campoBusqueda = document.getElementById('busqueda');
+    campoBusqueda.addEventListener('input', filtrarDatos);
+    
+    // Configurar botón para agregar nueva transacción
+    const btnAgregar = document.getElementById('btnAgregarTransaccion');
+    if (btnAgregar) {
+        btnAgregar.addEventListener('click', abrirModalCreacion);
+    }
+    
+    // Configurar botón para guardar transacción
+    const btnGuardar = document.getElementById('btnGuardarTransaccion');
+    if (btnGuardar) {
+        btnGuardar.addEventListener('click', guardarTransaccion);
+    }
+    
+    // Configurar botón para confirmar eliminación
+    const btnConfirmar = document.getElementById('btnConfirmarEliminar');
+    if (btnConfirmar) {
+        btnConfirmar.addEventListener('click', eliminarTransaccion);
     }
 }); 
