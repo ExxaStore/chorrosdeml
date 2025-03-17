@@ -39,7 +39,7 @@
                     </button>
                 </div>
                 <button id="btnAgregarTransaccion" class="btn" style="display: none; background-color: #2D3276; color: white;">
-                    <i class="bi bi-plus-circle me-1"></i> Nuevo Ladrón
+                    <i class="bi bi-plus-circle me-1"></i> Nuevo Chorro
                 </button>
             </div>
         </div>
@@ -68,6 +68,14 @@
                         </thead>
                         <tbody id="tablaCuerpo">
                             <!-- Los datos se cargarán dinámicamente con JavaScript -->
+                            <tr id="tablaCargando">
+                                <td colspan="12" class="text-center">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Cargando...</span>
+                                    </div>
+                                    <p>Cargando datos...</p>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -80,7 +88,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="transaccionModalLabel">Nuevo Ladrón</h5>
+                    <h5 class="modal-title" id="transaccionModalLabel">Nuevo Chorro</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -237,7 +245,7 @@
     <!-- Footer -->
     <footer class="ml-footer">
         <div class="container">
-            <p>Creado por DMG | Versión 1.3</p>
+            <p>Creado por DMG | Versión 1.31</p>
         </div>
     </footer>
 
@@ -250,9 +258,20 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Inicializando scripts adicionales');
             
+            // Forzar carga de datos desde aquí
+            if (typeof cargarDatos === 'function' && typeof datosTransacciones !== 'undefined') {
+                console.log('Cargando datos directamente desde index.html...', datosTransacciones.length + ' registros');
+                // Asegurarnos que el array de datos tenga los elementos correctos
+                datos = [...datosTransacciones];
+                // Cargar datos en la tabla
+                cargarDatos(datos);
+            } else {
+                console.error('Las funciones o datos no están disponibles. Revisa que data.js se haya cargado correctamente.');
+            }
+            
             // Asegurarse de que los datos se carguen
             if (typeof ordenarDatos === 'function') {
-                console.log('Cargando datos de transacciones...');
+                console.log('Ordenando datos de transacciones...');
                 ordenarDatos('fecha');
             } else {
                 console.error('La función ordenarDatos no está disponible. Verificar si data.js se cargó correctamente.');

@@ -99,6 +99,8 @@ function cargarDatos(datosMostrar = datos) {
     const tabla = document.getElementById('tablaCuerpo');
     tabla.innerHTML = '';
     
+    console.log('Cargando datos en la tabla:', datosMostrar.length + ' registros');
+    
     datosMostrar.forEach((item, index) => {
         const fila = document.createElement('tr');
         
@@ -158,7 +160,11 @@ function cargarDatos(datosMostrar = datos) {
     });
     
     // Actualizar la visibilidad de los botones según autenticación
-    updateAuthUI();
+    if (typeof updateAuthUI === 'function') {
+        updateAuthUI();
+    } else {
+        console.warn('La función updateAuthUI no está disponible.');
+    }
 }
 
 // Función para ordenar los datos
@@ -234,7 +240,7 @@ function abrirModalCreacion() {
     debug('Abriendo modal en modo creación');
     
     try {
-        document.getElementById('transaccionModalLabel').textContent = 'Nuevo Ladrón';
+        document.getElementById('transaccionModalLabel').textContent = 'Nuevo Chorro';
         document.getElementById('transaccionForm').reset();
         
         // Configurar la fecha de hoy por defecto
@@ -465,5 +471,21 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Cargar datos inmediatamente (para solucionar problema de datos no visibles)
-console.log('Cargando datos inmediatamente...');
-ordenarDatos('fecha');
+console.log('Inicializando carga inmediata...');
+// Esperar a que el DOM esté listo antes de intentar cargar los datos
+if (document.readyState === 'loading') {
+    console.log('El documento aún está cargando, esperando al evento DOMContentLoaded...');
+    // Si el documento aún está cargando, esperar al evento DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM listo (desde event listener) - Cargando datos...');
+        setTimeout(() => {
+            ordenarDatos('fecha');
+        }, 100);
+    });
+} else {
+    // Si el documento ya está cargado, cargar los datos inmediatamente
+    console.log('DOM ya está listo - Cargando datos inmediatamente...');
+    setTimeout(() => {
+        ordenarDatos('fecha');
+    }, 100);
+}

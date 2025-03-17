@@ -50,6 +50,7 @@ body {
     height: 70px;
     width: auto;
     object-fit: contain;
+    background: transparent;
 }
 
 .ml-brand-text {
