@@ -11,6 +11,11 @@ let ordenActual = {
 let idTransaccionEliminar = null;
 let modoEdicion = false;
 
+// Función para depurar en consola
+function debug(msg, obj) {
+    console.log('DEBUG: ' + msg, obj || '');
+}
+
 // Función para guardar datos en localStorage
 function guardarDatosLocales() {
     localStorage.setItem('chorrodeml_datos', JSON.stringify(datos));
@@ -18,6 +23,7 @@ function guardarDatosLocales() {
 
 // Función para cargar los datos en la tabla
 function cargarDatos(datos) {
+    debug('Cargando datos en la tabla', datos.length + ' registros');
     const tablaCuerpo = document.getElementById('tablaCuerpo');
     tablaCuerpo.innerHTML = '';
 
@@ -62,6 +68,7 @@ function cargarDatos(datos) {
     document.querySelectorAll('.btn-action-edit').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const index = e.currentTarget.getAttribute('data-index');
+            debug('Botón editar cliqueado', 'índice: ' + index);
             abrirModalEdicion(index);
         });
     });
@@ -69,6 +76,7 @@ function cargarDatos(datos) {
     document.querySelectorAll('.btn-action-delete').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const index = e.currentTarget.getAttribute('data-index');
+            debug('Botón eliminar cliqueado', 'índice: ' + index);
             abrirModalEliminar(index);
         });
     });
@@ -150,22 +158,42 @@ function filtrarDatos() {
 
 // Función para abrir el modal en modo creación
 function abrirModalCreacion() {
-    document.getElementById('transaccionModalLabel').textContent = 'Nueva Transacción';
-    document.getElementById('transaccionForm').reset();
+    debug('Abriendo modal en modo creación');
     
-    // Configurar la fecha de hoy por defecto
-    const hoy = new Date().toISOString().split('T')[0];
-    document.getElementById('fecha').value = hoy;
-    
-    // Generar número de venta aleatorio para nueva transacción
-    const numeroAleatorio = Math.floor(Math.random() * 90000000) + 10000000;
-    document.getElementById('nroVenta').value = `ML-${numeroAleatorio}`;
-    
-    document.getElementById('transaccionId').value = '';
-    modoEdicion = false;
-    
-    const transaccionModal = new bootstrap.Modal(document.getElementById('transaccionModal'));
-    transaccionModal.show();
+    try {
+        document.getElementById('transaccionModalLabel').textContent = 'Nuevo Ladrón';
+        document.getElementById('transaccionForm').reset();
+        
+        // Configurar la fecha de hoy por defecto
+        const hoy = new Date().toISOString().split('T')[0];
+        document.getElementById('fecha').value = hoy;
+        
+        // Generar número de venta aleatorio para nueva transacción
+        const numeroAleatorio = Math.floor(Math.random() * 90000000) + 10000000;
+        document.getElementById('nroVenta').value = `ML-${numeroAleatorio}`;
+        
+        document.getElementById('transaccionId').value = '';
+        modoEdicion = false;
+        
+        // Intentar inicializar el modal desde bootstrap o usar la variable global si existe
+        try {
+            const modal = new bootstrap.Modal(document.getElementById('transaccionModal'));
+            modal.show();
+            debug('Modal inicializado y mostrado con nueva instancia');
+        } catch (error) {
+            debug('Error al inicializar modal con nueva instancia', error);
+            
+            // Intentar usar la variable global definida en el script adicional
+            if (window.transaccionModal) {
+                window.transaccionModal.show();
+                debug('Modal mostrado desde variable global');
+            } else {
+                console.error('No se pudo mostrar el modal. Error:', error);
+            }
+        }
+    } catch (error) {
+        console.error('Error al abrir modal de creación:', error);
+    }
 }
 
 // Función para abrir el modal en modo edición
@@ -262,33 +290,63 @@ function eliminarTransaccion() {
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
-    // Guardar datos iniciales en localStorage si no existen
-    if (!localStorage.getItem('chorrodeml_datos')) {
-        guardarDatosLocales();
-    }
+    debug('Documento cargado, inicializando la aplicación');
     
-    // Cargar datos iniciales
-    ordenarDatos('fecha');
-    
-    // Configurar eventos de ordenamiento en encabezados
-    const encabezados = document.querySelectorAll('.sortable');
-    encabezados.forEach(encabezado => {
-        encabezado.addEventListener('click', () => {
-            const columna = encabezado.getAttribute('data-key');
-            ordenarDatos(columna);
+    try {
+        // Guardar datos iniciales en localStorage si no existen
+        if (!localStorage.getItem('chorrodeml_datos')) {
+            debug('Guardando datos iniciales en localStorage');
+            guardarDatosLocales();
+        }
+        
+        // Cargar datos iniciales
+        ordenarDatos('fecha');
+        
+        // Configurar eventos de ordenamiento en encabezados
+        const encabezados = document.querySelectorAll('.sortable');
+        encabezados.forEach(encabezado => {
+            encabezado.addEventListener('click', () => {
+                const columna = encabezado.getAttribute('data-key');
+                ordenarDatos(columna);
+            });
         });
-    });
-    
-    // Configurar búsqueda
-    const campoBusqueda = document.getElementById('busqueda');
-    campoBusqueda.addEventListener('input', filtrarDatos);
-    
-    // Configurar botón para agregar nueva transacción
-    document.getElementById('btnAgregarTransaccion').addEventListener('click', abrirModalCreacion);
-    
-    // Configurar botón para guardar transacción
-    document.getElementById('btnGuardarTransaccion').addEventListener('click', guardarTransaccion);
-    
-    // Configurar botón para confirmar eliminación
-    document.getElementById('btnConfirmarEliminar').addEventListener('click', eliminarTransaccion);
+        
+        // Configurar búsqueda
+        const campoBusqueda = document.getElementById('busqueda');
+        campoBusqueda.addEventListener('input', filtrarDatos);
+        
+        // Configurar botón para agregar nueva transacción
+        const btnAgregar = document.getElementById('btnAgregarTransaccion');
+        if (btnAgregar) {
+            debug('Configurando botón para agregar nueva transacción');
+            btnAgregar.addEventListener('click', () => {
+                debug('Botón Nuevo Ladrón cliqueado');
+                abrirModalCreacion();
+            });
+        } else {
+            console.error('Error: No se encontró el botón para agregar transacción');
+        }
+        
+        // Configurar botón para guardar transacción
+        const btnGuardar = document.getElementById('btnGuardarTransaccion');
+        if (btnGuardar) {
+            debug('Configurando botón para guardar transacción');
+            btnGuardar.addEventListener('click', guardarTransaccion);
+        } else {
+            console.error('Error: No se encontró el botón para guardar transacción');
+        }
+        
+        // Configurar botón para confirmar eliminación
+        const btnConfirmar = document.getElementById('btnConfirmarEliminar');
+        if (btnConfirmar) {
+            debug('Configurando botón para confirmar eliminación');
+            btnConfirmar.addEventListener('click', eliminarTransaccion);
+        } else {
+            console.error('Error: No se encontró el botón para confirmar eliminación');
+        }
+        
+        debug('Inicialización completada');
+    } catch (error) {
+        console.error('Error durante la inicialización:', error);
+    }
 }); 

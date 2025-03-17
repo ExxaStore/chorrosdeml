@@ -100,11 +100,18 @@ body {
     border: 1px solid rgba(0,0,0,.1);
     border-radius: 4px;
     transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
 }
 
 .btn-action:hover {
     color: var(--ml-blue);
     border-color: var(--ml-blue);
+    transform: scale(1.1);
+    cursor: pointer;
 }
 
 .btn-action-edit {
@@ -113,6 +120,10 @@ body {
 
 .btn-action-delete {
     color: #f73;
+}
+
+.btn-action i {
+    font-size: 16px;
 }
 
 /* Estilos para modal */
