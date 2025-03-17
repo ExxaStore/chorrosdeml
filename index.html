@@ -27,9 +27,9 @@
     <nav class="navbar navbar-expand-lg ml-navbar">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="https://http2.mlstatic.com/frontend-assets/ml-web-navigation/ui-navigation/5.21.22/mercadolibre/logo__large_plus.png" alt="Logo ML" class="ml-logo me-2">
-                <h2 class="mb-0 ml-brand-text">Chorros de Mercadolibre</h2>
+                <img src="chorros_mercadolibre_logo.png" alt="Logo Chorros ML" class="ml-logo me-2">
             </a>
+            <h2 class="mb-0 ml-brand-text text-center flex-grow-1">Chorros de Mercadolibre</h2>
             <div class="d-flex align-items-center">
                 <div class="input-group me-3">
                     <input type="text" id="busqueda" class="form-control" placeholder="Buscar transacciones...">
@@ -37,7 +37,7 @@
                         <i class="bi bi-search"></i>
                     </button>
                 </div>
-                <button id="btnAgregarTransaccion" class="btn btn-primary">
+                <button id="btnAgregarTransaccion" class="btn btn-primary" style="display: none;">
                     <i class="bi bi-plus-circle me-1"></i> Nuevo Ladrón
                 </button>
             </div>
@@ -244,6 +244,11 @@
                 window.loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
                 window.registroModal = new bootstrap.Modal(document.getElementById('registroModal'));
                 
+                // Limpiar el formulario cuando se cierra el modal para evitar que se quede colgado
+                document.getElementById('transaccionModal').addEventListener('hidden.bs.modal', function () {
+                    document.getElementById('transaccionForm').reset();
+                });
+                
                 // Verificar que el botón de nueva transacción funcione
                 document.getElementById('btnAgregarTransaccion').addEventListener('click', function() {
                     console.log('Botón Nuevo Ladrón clickeado desde script adicional');
@@ -304,15 +309,32 @@
         // Función para actualizar la UI según el estado de autenticación
         function updateAuthUI() {
             const userStr = localStorage.getItem('chorrodeml_user');
+            const btnAgregar = document.getElementById('btnAgregarTransaccion');
             
             if (userStr) {
                 const user = JSON.parse(userStr);
                 document.getElementById('username-display').textContent = user.name;
                 document.getElementById('auth-guest').classList.add('d-none');
                 document.getElementById('auth-user').classList.remove('d-none');
+                
+                // Mostrar botón de agregar nuevo ladrón
+                btnAgregar.style.display = 'inline-block';
+                
+                // Mostrar botones de acciones en las filas
+                document.querySelectorAll('.btn-action').forEach(btn => {
+                    btn.style.display = 'inline-flex';
+                });
             } else {
                 document.getElementById('auth-guest').classList.remove('d-none');
                 document.getElementById('auth-user').classList.add('d-none');
+                
+                // Ocultar botón de agregar nuevo ladrón
+                btnAgregar.style.display = 'none';
+                
+                // Ocultar botones de acciones en las filas
+                document.querySelectorAll('.btn-action').forEach(btn => {
+                    btn.style.display = 'none';
+                });
             }
         }
     </script>

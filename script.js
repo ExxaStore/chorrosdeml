@@ -27,6 +27,11 @@ function cargarDatos(datos) {
     const tablaCuerpo = document.getElementById('tablaCuerpo');
     tablaCuerpo.innerHTML = '';
 
+    // Verificar si el usuario está autenticado
+    const userStr = localStorage.getItem('chorrodeml_user');
+    const isLoggedIn = !!userStr;
+    const displayStyle = isLoggedIn ? 'inline-flex' : 'none';
+
     datos.forEach((item, index) => {
         const fila = document.createElement('tr');
         
@@ -52,10 +57,10 @@ function cargarDatos(datos) {
             <td>${item.itemDevuelto || '-'}</td>
             <td>${item.prueba || '-'}</td>
             <td>
-                <button class="btn-action btn-action-edit" data-index="${index}">
+                <button class="btn-action btn-action-edit" data-index="${index}" style="display: ${displayStyle}">
                     <i class="bi bi-pencil-square"></i>
                 </button>
-                <button class="btn-action btn-action-delete" data-index="${index}">
+                <button class="btn-action btn-action-delete" data-index="${index}" style="display: ${displayStyle}">
                     <i class="bi bi-trash"></i>
                 </button>
             </td>

@@ -5,6 +5,7 @@
     --ml-text: #333333;
     --ml-light-grey: #ebebeb;
     --ml-grey: #ededed;
+    --ml-navy: #2D3276;
 }
 
 body {
@@ -15,16 +16,17 @@ body {
 
 /* Barra de autenticación */
 .auth-bar {
-    background-color: white;
+    background-color: var(--ml-yellow);
     padding: 6px 0;
     border-bottom: 1px solid rgba(0,0,0,.1);
     font-size: 14px;
 }
 
 .auth-bar .btn-link {
-    color: var(--ml-blue);
+    color: var(--ml-navy);
     text-decoration: none;
     padding: 0 10px;
+    font-weight: 500;
 }
 
 .auth-bar .btn-link:hover {
@@ -33,7 +35,8 @@ body {
 }
 
 #username-display {
-    color: var(--ml-text);
+    color: var(--ml-navy);
+    font-weight: 500;
 }
 
 /* Navbar estilo MercadoLibre */
@@ -44,14 +47,14 @@ body {
 }
 
 .ml-logo {
-    height: 34px;
+    height: 80px;
     width: auto;
 }
 
 .ml-brand-text {
-    color: var(--ml-blue);
+    color: var(--ml-navy);
     font-weight: 600;
-    font-size: 24px;
+    font-size: 28px;
 }
 
 .navbar-brand h2 {
@@ -93,7 +96,7 @@ body {
 
 /* Cabecera de tabla estilo MercadoLibre */
 .ml-table-header {
-    background-color: var(--ml-blue);
+    background-color: var(--ml-navy);
     color: white;
 }
 
@@ -182,7 +185,7 @@ body {
 }
 
 .modal-header {
-    background-color: var(--ml-blue);
+    background-color: var(--ml-navy);
     color: white;
     border-bottom: none;
 }
@@ -213,11 +216,13 @@ body {
 
 @media (max-width: 768px) {
     .ml-logo {
-        height: 28px;
+        height: 60px;
     }
     
     .ml-brand-text {
-        font-size: 18px;
+        font-size: 22px;
+        text-align: center;
+        margin: 10px 0;
     }
     
     .input-group {
@@ -231,7 +236,7 @@ body {
     
     .ml-navbar .container {
         flex-direction: column;
-        align-items: start !important;
+        align-items: center !important;
     }
     
     .ml-navbar .d-flex {
