@@ -27,7 +27,7 @@
     <nav class="navbar navbar-expand-lg ml-navbar">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="chorros_mercadolibre_logo.png" alt="Logo Chorros ML" class="ml-logo me-2">
+                <img src="chorros_icon.png" alt="Logo Chorros ML" class="ml-logo me-2">
             </a>
             <h2 class="mb-0 ml-brand-text text-center flex-grow-1">Chorros de Mercadolibre</h2>
             <div class="d-flex align-items-center">
@@ -49,8 +49,8 @@
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover" id="tablaDatos">
-                        <thead class="ml-table-header">
-                            <tr>
+                        <thead>
+                            <tr class="ml-table-header">
                                 <th data-key="fecha" class="sortable">Fecha <i class="bi bi-arrow-down-up"></i></th>
                                 <th data-key="nroVenta" class="sortable">Nro Venta ML <i class="bi bi-arrow-down-up"></i></th>
                                 <th data-key="nombreCompleto" class="sortable">Nombre y Apellido <i class="bi bi-arrow-down-up"></i></th>
@@ -244,10 +244,26 @@
                 window.loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
                 window.registroModal = new bootstrap.Modal(document.getElementById('registroModal'));
                 
-                // Limpiar el formulario cuando se cierra el modal para evitar que se quede colgado
-                document.getElementById('transaccionModal').addEventListener('hidden.bs.modal', function () {
-                    document.getElementById('transaccionForm').reset();
-                });
+                // Función para limpiar modales al cerrar
+                function setupModalClose(modalId, formId) {
+                    document.getElementById(modalId).addEventListener('hidden.bs.modal', function () {
+                        if (formId) {
+                            document.getElementById(formId).reset();
+                        }
+                        // Asegurarse de que el backdrop se elimina correctamente
+                        document.body.classList.remove('modal-open');
+                        const backdrop = document.querySelector('.modal-backdrop');
+                        if (backdrop) {
+                            backdrop.remove();
+                        }
+                    });
+                }
+                
+                // Aplicar limpieza a todos los modales
+                setupModalClose('transaccionModal', 'transaccionForm');
+                setupModalClose('eliminarModal', null);
+                setupModalClose('loginModal', 'loginForm');
+                setupModalClose('registroModal', 'registroForm');
                 
                 // Verificar que el botón de nueva transacción funcione
                 document.getElementById('btnAgregarTransaccion').addEventListener('click', function() {

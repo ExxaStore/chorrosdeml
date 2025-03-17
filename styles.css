@@ -103,6 +103,19 @@ body {
 .ml-table-header th {
     font-weight: 500;
     border-bottom: none;
+    color: white;
+}
+
+/* Asegurarse de que la fila de cabecera tenga el color de fondo correcto */
+tr.ml-table-header {
+    background-color: var(--ml-navy) !important;
+    color: white !important;
+}
+
+tr.ml-table-header th {
+    color: white !important;
+    font-weight: 500;
+    border-bottom: none;
 }
 
 .table thead th {
