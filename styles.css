@@ -49,14 +49,7 @@ body {
 .ml-logo {
     height: 70px;
     width: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    color: #2D3276;
-    background-color: white;
-    border-radius: 10px;
-    padding: 5px 10px;
+    object-fit: contain;
 }
 
 .ml-brand-text {

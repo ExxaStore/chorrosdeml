@@ -426,6 +426,7 @@ function eliminarTransaccion() {
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM cargado en data.js - Cargando datos iniciales...');
     // Cargar datos iniciales
     ordenarDatos('fecha');
     
@@ -462,3 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnConfirmar.addEventListener('click', eliminarTransaccion);
     }
 });
+
+// Cargar datos inmediatamente (para solucionar problema de datos no visibles)
+console.log('Cargando datos inmediatamente...');
+ordenarDatos('fecha');
